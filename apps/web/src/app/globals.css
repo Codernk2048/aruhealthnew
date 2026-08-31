@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #005eb8;
+  --primary-dark: #003e8c;
+  --bright: #41b6e6;
+  --soft: #e8f0fa;
+  --mist: #f2f7fc;
+  --ink: #1c2b3a;
+  --muted: #5b6b7b;
+  --sage: #7a9e7e;
+  --teal: #3c9d9b;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(1100px 520px at 12% -8%, #e3eefb 0%, rgba(227, 238, 251, 0) 60%),
+    radial-gradient(900px 480px at 105% 4%, #e7f3f4 0%, rgba(231, 243, 244, 0) 55%),
+    var(--mist);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--bright);
+  color: white;
+}
+
+@layer components {
+  .neu {
+    @apply rounded-neu shadow-neu bg-white;
+  }
+  .neu-sm {
+    @apply rounded-xl shadow-neu-sm bg-white;
+  }
+  .neu-inset {
+    @apply rounded-xl shadow-neu-inset bg-[#eef4fb];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold transition-all duration-200 active:scale-[0.98];
+  }
+  .btn-primary {
+    @apply btn text-white;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--bright) 130%);
+    box-shadow: 0 14px 26px -12px rgba(0, 94, 184, 0.55);
+  }
+  .btn-primary:hover {
+    @apply -translate-y-0.5;
+    box-shadow: 0 18px 30px -12px rgba(0, 94, 184, 0.65);
+  }
+  .btn-ghost {
+    @apply btn neu-sm text-primary hover:-translate-y-0.5;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-4 py-1.5 text-sm font-medium;
+  }
+  .input-neu {
+    @apply neu-inset w-full rounded-xl px-4 py-2.5 text-ink outline-none transition focus:ring-2 focus:ring-primary/40 placeholder:text-muted/60;
+  }
+  .eyebrow {
+    @apply mb-3 inline-flex items-center gap-2 rounded-full bg-primary-soft px-4 py-1.5 text-sm font-semibold tracking-wide text-primary;
+  }
+  .prose-health h2,
+  .prose-health h3 {
+    @apply mt-6 mb-2 text-primary-dark;
+  }
+  .prose-health p {
+    @apply my-3 leading-relaxed text-ink;
+  }
+  .prose-health ul {
+    @apply my-3 list-disc space-y-1 pl-6 text-ink;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

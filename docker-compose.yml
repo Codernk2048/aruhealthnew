@@ -1,0 +1,18 @@
+# Production reference: run PostgreSQL locally without installing it.
+# Used in place of SQLite when provider is "postgresql" (see SECURITY.md / PLANNING.md).
+version: "3.9"
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: aruhealth-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aruhealth
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

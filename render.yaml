@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: aruhealth-api
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build -w @aruhealth/api
+    startCommand: npm run start -w @aruhealth/api
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGIN
+        value: "https://*.vercel.app"
+      - key: NODE_ENV
+        value: production

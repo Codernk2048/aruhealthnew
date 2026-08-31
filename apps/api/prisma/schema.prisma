@@ -1,0 +1,135 @@
+// ARUHEALTH database schema.
+// Default provider = sqlite for zero-setup local dev.
+// Production: set provider below to "postgresql" (see docker-compose.yml + .env.example).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("USER") // USER | ADMIN
+  language     String   @default("en")   // en | ne
+  createdAt    DateTime @default(now())
+
+  posts          Post[]
+  foodLogs       FoodLog[]
+  exerciseLogs   ExerciseLog[]
+  sleepLogs      SleepLog[]
+  meditationLogs MeditationLog[]
+}
+
+model Food {
+  id      Int    @id @default(autoincrement())
+  name    String
+  nameNe  String @default("")
+  kcal    Int
+  protein Float  @default(0)
+  carbs   Float  @default(0)
+  fat     Float  @default(0)
+  unit    String @default("serving")
+}
+
+model FoodLog {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  foodName  String
+  foodNameNe String @default("")
+  qty       Float
+  kcal      Int
+  mealType  String   // breakfast | lunch | dinner | snack
+  date      String   // YYYY-MM-DD
+  createdAt DateTime @default(now())
+}
+
+model Exercise {
+  id     Int    @id @default(autoincrement())
+  name   String
+  nameNe String @default("")
+  met    Float  // metabolic equivalent
+}
+
+model ExerciseLog {
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        Int
+  exerciseName  String
+  met           Float
+  durationMin   Int
+  kcal          Int
+  date          String   // YYYY-MM-DD
+  createdAt     DateTime @default(now())
+}
+
+model SleepLog {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  hours     Float
+  quality   String   // poor | fair | good
+  notes     String?
+  date      String   // YYYY-MM-DD, one entry per night
+  createdAt DateTime @default(now())
+
+  @@unique([userId, date])
+}
+
+model MeditationLog {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  minutes   Int
+  technique String
+  date      String // YYYY-MM-DD
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  author      User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId    Int?
+  titleEn     String
+  titleNe     String
+  excerptEn   String
+  excerptNe   String
+  contentEn   String // rich HTML (sanitized on web render)
+  contentNe   String
+  coverImage  String   @default("")
+  tags        String   @default("")
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  views       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Video {
+  id        Int      @id @default(autoincrement())
+  titleEn   String
+  titleNe   String
+  url       String // player embed URL (YouTube/Vimeo)
+  provider  String   @default("YOUTUBE")
+  category  String   @default("meditation")
+  thumbnail String   @default("")
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id        Int     @id @default(autoincrement())
+  quoteEn   String
+  quoteNe   String
+  author    String
+  role      String  @default("")
+  rating    Int     @default(5)
+  published Boolean @default(true)
+}
