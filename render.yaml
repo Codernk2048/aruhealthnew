@@ -3,7 +3,7 @@ services:
     name: aruhealth-api
     runtime: node
     plan: free
-    buildCommand: npm install && npx prisma generate --schema=apps/api/prisma/schema.prisma && npm run build -w @aruhealth/api
+    buildCommand: npm install && npx prisma generate --schema=apps/api/prisma/schema.prisma
     startCommand: npm run start -w @aruhealth/api
     envVars:
       - key: DATABASE_URL
