@@ -11,7 +11,8 @@
     "dev": "concurrently -n API,WEB -c blue,green \"npm run dev -w @aruhealth/api\" \"npm run dev -w @aruhealth/web\"",
     "dev:api": "npm run dev -w @aruhealth/api",
     "dev:web": "npm run dev -w @aruhealth/web",
-    "build": "npm run build -w @aruhealth/api && npm run build -w @aruhealth/web",
+    "build": "npm run build -w @aruhealth/web",
+    "build:api": "npm run build -w @aruhealth/api",
     "db:setup": "npm run db:setup -w @aruhealth/api",
     "seed": "npm run seed -w @aruhealth/api",
     "lint": "npm run lint -w @aruhealth/web"
