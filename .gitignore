@@ -11,3 +11,4 @@ apps/api/prisma/dev.db
 apps/api/prisma/dev.db-journal
 .DS_Store
 coverage/
+.vercel
