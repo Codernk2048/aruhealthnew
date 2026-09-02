@@ -16,7 +16,7 @@ export const config = {
     "dev-only-insecure-secret-please-change-in-production",
   ),
   jwtExpiresIn: required("JWT_EXPIRES_IN", "7d"),
-  corsOrigin: required("CORS_ORIGIN", "http://localhost:3000"),
+  corsOrigin: required("CORS_ORIGIN", "http://localhost:3000,https://*.vercel.app"),
 };
 
 if (config.jwtSecret.includes("dev-only")) {

@@ -15,22 +15,35 @@ export default function CalorieTracker() {
   const [logs, setLogs] = useState<{ id: number; foodName: string; qty: number; kcal: number; mealType: string }[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [searchError, setSearchError] = useState("");
+  const [searched, setSearched] = useState(false);
   const today = new Date().toISOString().slice(0, 10);
 
   const load = useCallback(() => {
     http
       .get<{ logs: typeof logs }>(`/food-logs?date=${today}`)
       .then((r) => setLogs(r.logs))
-      .catch(() => setLogs([]));
+      .catch((e) => {
+        setLogs([]);
+        if (e instanceof Error && e.message.includes("401")) setMessage("Please log in again - session expired.");
+      });
   }, [today]);
 
   useEffect(load, [load]);
 
   const search = async () => {
     if (!query.trim()) return;
-    const r = await http.get<{ foods: typeof results }>(`/foods?q=${encodeURIComponent(query)}`);
-    setResults(r.foods);
-    setSelected(null);
+    setSearchError("");
+    setSearched(false);
+    try {
+      const r = await http.get<{ foods: typeof results }>(`/foods?q=${encodeURIComponent(query)}`);
+      setResults(r.foods);
+      setSelected(null);
+      setSearched(true);
+    } catch (e) {
+      setSearchError(e instanceof Error ? e.message : "Search failed");
+      setResults([]);
+    }
   };
 
   const add = async () => {
@@ -88,7 +101,8 @@ export default function CalorieTracker() {
               ))}
             </ul>
           )}
-          {query && results.length === 0 && (
+          {searchError && <p className="mt-3 text-sm text-red-600">{searchError}</p>}
+          {searched && results.length === 0 && !searchError && (
             <p className="mt-3 text-sm text-muted">{t("calorie.searchEmpty")}</p>
           )}
 

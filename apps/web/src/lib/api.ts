@@ -1,5 +1,12 @@
 const BASE =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
+  (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1").replace(/\/$/, "");
+
+if (typeof window !== "undefined" && BASE.includes("localhost") && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+  console.warn(
+    `[api] NEXT_PUBLIC_API_URL is ${BASE} but page is on ${window.location.hostname}. ` +
+    "Set NEXT_PUBLIC_API_URL to your deployed API (e.g. https://your-api.onrender.com/api/v1) in Vercel env vars."
+  );
+}
 
 const TOKEN_KEY = "aru_token";
 

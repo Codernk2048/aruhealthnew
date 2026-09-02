@@ -9,6 +9,12 @@ build/
 apps/api/.env
 apps/api/prisma/dev.db
 apps/api/prisma/dev.db-journal
+apps/web/.env.local
+apps/web/tsconfig.tsbuildinfo
+ARUHEALTH NEW.txt
+ARUHEALTH NEW 2.txt
+api_log.txt
+api_*.log
 .DS_Store
 coverage/
 .vercel

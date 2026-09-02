@@ -3,7 +3,7 @@ services:
     name: aruhealth-api
     runtime: node
     plan: free
-    buildCommand: npm install && npx prisma generate --schema=apps/api/prisma/schema.prisma
+    buildCommand: npm install && npx prisma generate --schema=apps/api/prisma/schema.prisma && npx prisma db push --schema=apps/api/prisma/schema.prisma --accept-data-loss
     startCommand: npm run start -w @aruhealth/api
     envVars:
       - key: DATABASE_URL
@@ -11,8 +11,10 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
-        value: never
+        value: 7d
       - key: CORS_ORIGIN
-        value: "https://aruhealth-web.vercel.app"
+        value: "http://localhost:3000,https://aruhealth-web.vercel.app,https://*.vercel.app"
       - key: NODE_ENV
         value: production
+      - key: NPM_CONFIG_WORKSPACE
+        value: "@aruhealth/api"

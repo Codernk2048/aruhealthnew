@@ -22,11 +22,31 @@ Seed creates:
 - `admin@aruhealth.com` / `admin123` (role ADMIN)
 - `demo@aruhealth.com` / `demo123` (role USER)
 
-## Switching to PostgreSQL (production)
-1. `docker-compose up -d` (or your own instance)
-2. In `apps/api/prisma/schema.prisma` set `provider = "postgresql"`
-3. Set `DATABASE_URL` to the PostgreSQL URL
-4. `npm run db:setup`
+## Deploy
+
+### Vercel (web) — https://vercel.com
+1. Import `https://github.com/Codernk2048/aruhealthnew` in Vercel.
+2. Framework: **Next.js**, Root directory: repo root (uses `vercel.json` → `apps/web/.next`).
+3. Env vars in Vercel Dashboard → Settings → Environment Variables:
+   - `NEXT_PUBLIC_API_URL=https://<your-api>.onrender.com/api/v1` (or Render URL)
+4. Deploy — `npm install` + `npm run build -w @aruhealth/web` runs automatically.
+
+### Render (api) — https://render.com
+`render.yaml` is committed. On Render: New → Blueprint → connect repo.
+Required env vars (Render dashboard → Environment, or `render.yaml` sync:false):
+- `DATABASE_URL` → Supabase/Neon postgres URL, e.g. `postgresql://postgres:[PASSWORD]@db.[REF].supabase.co:5432/postgres`
+- `JWT_SECRET` → auto-generated (`generateValue: true`)
+- `CORS_ORIGIN` → `http://localhost:3000,https://aruhealth-web.vercel.app,https://*.vercel.app` (comma-separated, `*` wildcard supported)
+Build: `npm install && npx prisma generate --schema=apps/api/prisma/schema.prisma && npx prisma db push ...`
+Start: `npm run start -w @aruhealth/api`
+After first deploy, seed once via Render Shell: `npm run seed -w @aruhealth/api`
+
+### Switching to PostgreSQL locally
+1. `docker-compose up -d`
+2. `DATABASE_URL="postgresql://postgres:postgres@localhost:5432/aruhealth"` in `apps/api/.env`
+3. Schema is already `postgresql` (see `apps/api/prisma/schema.prisma`)
+4. `npm run db:setup && npm run seed`
+For zero-setup SQLite: set provider to `sqlite` + `DATABASE_URL="file:./dev.db"`
 
 ## Scripts
 | Command | Action |

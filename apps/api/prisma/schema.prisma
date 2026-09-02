@@ -1,6 +1,6 @@
 // ARUHEALTH database schema.
-// Default provider = sqlite for zero-setup local dev.
-// Production: set provider below to "postgresql" (see docker-compose.yml + .env.example).
+// Provider = postgresql for prod (Supabase/Render) + local Docker (docker-compose.yml).
+// For zero-setup SQLite, change provider to "sqlite" + DATABASE_URL="file:./dev.db" in apps/api/.env
 
 generator client {
   provider = "prisma-client-js"

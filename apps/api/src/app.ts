@@ -24,7 +24,23 @@ export function createApp(): Express {
 
   app.set("trust proxy", 1);
   app.use(helmet({ contentSecurityPolicy: false }));
-  app.use(cors({ origin: config.corsOrigin.split(",").map((s) => s.trim()) }));
+  const allowedOrigins = config.corsOrigin.split(",").map((s) => s.trim()).filter(Boolean);
+  app.use(cors({
+    origin(origin, cb) {
+      // allow non-browser / server-to-server requests with no Origin header
+      if (!origin) return cb(null, true);
+      const allowed = allowedOrigins.some((pattern) => {
+        if (pattern.includes("*")) {
+          const re = new RegExp("^" + pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\\\*/g, ".*") + "$");
+          return re.test(origin);
+        }
+        return pattern === origin;
+      });
+      // don't throw — just disable CORS for this origin (browser will block, but server won't 500)
+      return cb(null, allowed);
+    },
+    credentials: true,
+  }));
   app.use(express.json({ limit: "200kb" }));
 
   const apiLimiter = rateLimit({

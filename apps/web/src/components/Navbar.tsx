@@ -38,7 +38,7 @@ export default function Navbar() {
     () =>
       NAV_KEYS.map((key) => ({
         key,
-        href: `/features`,
+        href: key === "features" ? "/features" : `/${key}`,
         label: t(`nav.${key}`),
       })),
     [t],

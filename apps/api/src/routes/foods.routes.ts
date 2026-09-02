@@ -20,16 +20,22 @@ const foodSchema = z.object({
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const q = String(req.query.q ?? "").trim().toLowerCase();
+    const q = String(req.query.q ?? "").trim();
+    if (!q) {
+      const foods = await prisma.food.findMany({ orderBy: { name: "asc" }, take: 50 });
+      res.json({ foods });
+      return;
+    }
+    // SQLite LIKE is case-insensitive for ASCII; for unicode/edge cases also try lowercased fallback
     const foods = await prisma.food.findMany({
-      where: q
-        ? {
-            OR: [
-              { name: { contains: q } },
-              { nameNe: { contains: q } },
-            ],
-          }
-        : undefined,
+      where: {
+        OR: [
+          { name: { contains: q } },
+          { nameNe: { contains: q } },
+          { name: { contains: q.toLowerCase() } },
+          { nameNe: { contains: q.toLowerCase() } },
+        ],
+      },
       orderBy: { name: "asc" },
       take: 50,
     });
