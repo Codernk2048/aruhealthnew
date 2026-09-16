@@ -22,7 +22,6 @@ export const ne: AruDict = {
     calorie: "क्यालोरी मिटर",
     videos: "भिडियो ग्यालरी",
     blog: "ब्लग",
-    shop: "पसल",
     about: "बारेमा",
     contact: "सम्पर्क",
     dashboard: "ड्यासबोर्ड",

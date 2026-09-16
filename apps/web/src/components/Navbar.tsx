@@ -14,7 +14,6 @@ const NAV_KEYS = [
   "calorie",
   "blog",
   "videos",
-  "shop",
 ] as const;
 
 const MOBILE_KEYS = [...NAV_KEYS, "about", "contact"] as const;

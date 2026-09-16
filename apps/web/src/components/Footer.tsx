@@ -28,7 +28,6 @@ export default function Footer() {
     { key: "fitness", href: "/fitness" },
     { key: "sleep", href: "/sleep" },
     { key: "calorie", href: "/calorie" },
-    { key: "shop", href: "/shop" },
   ];
   const resources = [
     { key: "videos", href: "/videos" },

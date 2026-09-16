@@ -20,7 +20,6 @@ export const en = {
     calorie: "Calorie Meter",
     videos: "Video Gallery",
     blog: "Blog",
-    shop: "Shop",
     about: "About",
     contact: "Contact",
     dashboard: "Dashboard",
