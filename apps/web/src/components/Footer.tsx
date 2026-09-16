@@ -1,10 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { FormEvent, useState } from "react";
 import { useI18n } from "@/i18n/provider";
+import { http } from "@/lib/api";
 
 export default function Footer() {
   const { t, lang } = useI18n();
+  const [email, setEmail] = useState("");
+  const [newsletterMessage, setNewsletterMessage] = useState("");
+
+  const subscribe = async (event: FormEvent) => {
+    event.preventDefault();
+    setNewsletterMessage(lang === "en" ? "Subscribing…" : "सदस्यता लिँदै…");
+    try {
+      await http.post("/newsletter/subscribe", { email });
+      setEmail("");
+      setNewsletterMessage(lang === "en" ? "You’re subscribed." : "तपाईंको सदस्यता सफल भयो।");
+    } catch {
+      setNewsletterMessage(lang === "en" ? "Please try again shortly." : "कृपया केही बेरपछि पुनः प्रयास गर्नुहोस्।");
+    }
+  };
 
   const product = [
     { key: "features", href: "/features" },
@@ -12,6 +28,7 @@ export default function Footer() {
     { key: "fitness", href: "/fitness" },
     { key: "sleep", href: "/sleep" },
     { key: "calorie", href: "/calorie" },
+    { key: "shop", href: "/shop" },
   ];
   const resources = [
     { key: "videos", href: "/videos" },
@@ -71,6 +88,18 @@ export default function Footer() {
             <p className="mt-4 text-sm font-medium text-primary-dark">
               {lang === "en" ? "🇬🇧 English · नेपाली" : "नेपाली · 🇬🇧 English"}
             </p>
+            <form onSubmit={subscribe} className="mt-5" aria-label="Newsletter subscription">
+              <label htmlFor="newsletter-email" className="text-sm font-semibold text-primary-dark">
+                {lang === "en" ? "Weekly health briefing" : "साप्ताहिक स्वास्थ्य जानकारी"}
+              </label>
+              <div className="mt-2 flex gap-2">
+                <input id="newsletter-email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" className="min-w-0 flex-1 rounded-xl border border-primary-soft bg-white px-3 py-2 text-sm outline-none focus:border-primary" />
+                <button type="submit" className="btn-primary !px-3 !py-2 text-sm">
+                  {lang === "en" ? "Join" : "जोडिनुहोस्"}
+                </button>
+              </div>
+              <p className="mt-2 min-h-5 text-xs text-muted" aria-live="polite">{newsletterMessage}</p>
+            </form>
           </div>
         </div>
 
