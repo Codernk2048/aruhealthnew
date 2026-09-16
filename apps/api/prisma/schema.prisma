@@ -133,3 +133,9 @@ model Testimonial {
   rating    Int     @default(5)
   published Boolean @default(true)
 }
+
+model NewsletterSubscriber {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  subscribedAt DateTime @default(now())
+}

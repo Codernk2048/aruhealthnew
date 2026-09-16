@@ -18,6 +18,7 @@ import videoRoutes from "./routes/videos.routes";
 import testimonialRoutes from "./routes/testimonials.routes";
 import chatRoutes from "./routes/chat.routes";
 import statsRoutes from "./routes/stats.routes";
+import newsletterRoutes from "./routes/newsletter.routes";
 
 export function createApp(): Express {
   const app = express();
@@ -64,6 +65,7 @@ export function createApp(): Express {
   app.use("/api/v1/testimonials", testimonialRoutes);
   app.use("/api/v1/chat", chatRoutes);
   app.use("/api/v1/stats", statsRoutes);
+  app.use("/api/v1/newsletter", newsletterRoutes);
 
   app.use(notFound);
   app.use(errorHandler);
